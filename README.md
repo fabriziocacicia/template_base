@@ -1,4 +1,4 @@
-# template_base
+# Base Template 
 The base template that all the repositories should create from.
 
 ## Features
