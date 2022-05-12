@@ -11,5 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-           fetch-depth: 0
+            fetch-depth: 0
+            token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - uses: fabriziocacicia/keep-history-conventional@v0.1.0
