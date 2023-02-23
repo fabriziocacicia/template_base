@@ -24,7 +24,7 @@ jobs:
           --method PUT \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/OWNER/REPO/actions/permissions \
+          /repos/${{ github.repository }}/actions/permissions \
           -F enabled=true \
           -f allowed_actions='all'  
           
@@ -32,7 +32,7 @@ jobs:
           --method PUT \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/OWNER/REPO/actions/permissions/workflow \
+          /repos/${{ github.repository }}/actions/permissions/workflow \
           -f default_workflow_permissions='write' \
           -F can_approve_pull_request_reviews=true 
         env:
