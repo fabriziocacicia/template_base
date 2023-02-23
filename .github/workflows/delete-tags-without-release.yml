@@ -1,6 +1,7 @@
 name: Delete Tags without Release
 on:
-  workflow_dispatch
+  branch_protection_rule:
+    types: [created]
 
 jobs:
   delete_tags_without_release:
