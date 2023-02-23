@@ -1,0 +1,44 @@
+name: Update Repository Settings
+on:
+  workflow_dispatch:
+  branch_protection_rule:
+    types: [created]
+
+jobs:
+  update_repository_settings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Update Repository Settings
+        shell: bash
+        run: |
+          gh repo edit --allow-update-branch --delete-branch-on-merge --enable-auto-merge=false --enable-merge-commit=false --enable-rebase-merge=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Update Actions Permissions
+        shell: bash
+        run: |
+         gh api \
+          --method PUT \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/OWNER/REPO/actions/permissions \
+          -F enabled=true \
+          -f allowed_actions='all'  
+          
+         gh api \
+          --method PUT \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/OWNER/REPO/actions/permissions/workflow \
+          -f default_workflow_permissions='write' \
+          -F can_approve_pull_request_reviews=true 
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Self Delete Workflow
+        if: "!contains(github.repository, 'template_base')"
+        uses: fabriziocacicia/self-delete-workflow-action@v0.1.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
